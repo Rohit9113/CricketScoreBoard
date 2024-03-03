@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <title>Document</title>
+
+        <style>
+            .dispOver {
+                background-color: black;
+                height: 500px;
+                width: 100%;
+                color: white;
+            }
+            .over {
+                padding-top: 5%;
+                /* margin-top: 2%; */
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root" style="text-align: center;"></div>
+
+        <script type="text/babel">
+            const { useState } = React;
+
+            const App = () => {
+                const [run, setRun] = useState(0);
+                const [wkt, setWkt] = useState(0);
+                const [selectedOver, setSelectedOver] = useState(1);
+                const [overHistory, setOverHistory] = useState([]);
+                const [wideBall, setWideBall] = useState(1);
+                const [noBall, setNoBall] = useState(1);
+                // const [reset, setReset] = useState(0);
+                // const [historyReset, setHistoryReset] = useState(0);
+
+                const scoreCount = (num) => {
+                    setRun(run + num);
+                    setWideBall(run + num);
+                    setNoBall(run + num);
+                    // setReset(run*0);
+                    updateOverHistory(num);
+                    
+                };
+
+                const oneWicket = () => {
+                    setWkt(wkt + 1);
+                };
+
+                const selectOver = (over) => {
+                    setSelectedOver(over);
+                };
+
+                const updateOverHistory = (score) => {
+                    setOverHistory([...overHistory, { over: selectedOver, score }]);
+                    setHistoryReset()
+                };
+
+                return (
+                    <>
+                        <h1>Count Your Cricket Score</h1>
+                        <h2>SCORE: {run}/{wkt}</h2>
+
+                        <div>
+                            <button onClick={() => scoreCount(0)}>0</button>
+                            <button onClick={() => scoreCount(1)}>1</button>
+                            <button onClick={() => scoreCount(2)}>2</button>
+                            <button onClick={() => scoreCount(3)}>3</button>
+                            <button onClick={() => scoreCount(4)}>4</button>
+                            <button onClick={() => scoreCount(6)}>6</button>
+                            <button onClick={() => scoreCount(1)}>Wide</button>
+                            <button onClick={() => scoreCount(1)}>No</button>
+                            <button onClick={oneWicket}>Wicket</button>    
+                        </div>
+
+                        <div>
+                            <h3>CHOOSE THE CURRENT OVER</h3>
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((over) => (
+                                <button key={over} onClick={() => selectOver(over)}>{over}</button>
+                            ))}
+                        </div>
+
+                        <div className="dispOver">
+                            <div className="over">{selectedOver} Over</div>
+                            <div className="overHistory">
+                                {overHistory.map((entry, index) => (
+                                    <div key={index}>{entry.over} Over: {entry.score} Run</div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                );
+            };
+
+            const RE = ReactDOM.createRoot(document.getElementById("root"));
+            RE.render(<App />);
+        </script>
+    </body>
+</html>
